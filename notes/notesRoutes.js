@@ -30,4 +30,22 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.post('', (req, res) => {
+  const { title, textBody } = req.body;
+  if (!title || !textBody) {
+    return res.status(400).json({
+      message: 'Please provide a title and text body for the note.',
+    });
+  }
+  const newNote = { title, textBody };
+  notes
+    .add(newNote)
+    .then((id) => {
+      res.status(201).json(id);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 module.exports = router;
