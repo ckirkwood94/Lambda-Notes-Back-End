@@ -1,0 +1,8 @@
+{
+  "name": "Lambda-Notes-Back-End",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ckirkwood94/Lambda-Notes-Back-End.git",
+  "author": "ckirkwood94 <ckirkwood94@gmail.com>",
+  "license": "MIT"
+}
