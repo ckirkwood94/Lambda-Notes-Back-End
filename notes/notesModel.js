@@ -7,6 +7,7 @@ module.exports = {
   getAll,
   getById,
   add,
+  remove,
 };
 
 function getAll() {
@@ -23,4 +24,10 @@ function add(note) {
   return db('notes')
     .insert(note, 'id')
     .into('notes');
+}
+
+function remove(id) {
+  return db('notes')
+    .where({ id })
+    .del();
 }

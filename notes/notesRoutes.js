@@ -48,4 +48,21 @@ router.post('', (req, res) => {
     });
 });
 
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  notes
+    .remove(id)
+    .then((count) => {
+      if (count === 0) {
+        return res.status(404).send({
+          message: `Note with ID ${id} does not exist.`,
+        });
+      }
+      res.status(200).send({ message: `Note with ID ${id} was removed.` });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 module.exports = router;
