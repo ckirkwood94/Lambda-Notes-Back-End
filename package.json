@@ -4,5 +4,20 @@
   "main": "index.js",
   "repository": "https://github.com/ckirkwood94/Lambda-Notes-Back-End.git",
   "author": "ckirkwood94 <ckirkwood94@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.5"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "helmet": "^3.14.0",
+    "knex": "^0.15.2",
+    "node": "^11.0.0",
+    "sqlite3": "^4.0.3"
+  }
 }
