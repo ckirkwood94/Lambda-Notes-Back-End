@@ -65,4 +65,30 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+router.put('/:id', (req, res) => {
+  const { title, textBody } = req.body;
+  if (!title || !textBody) {
+    return res.status(400).send({
+      message: 'Please provide a title and text body for the note.',
+    });
+  }
+  const { id } = req.params;
+  const newNote = { title, textBody };
+  notes
+    .update(id, newNote)
+    .then((note) => {
+      if (!note) {
+        return res.status(404).json({
+          message: 'No note found to update',
+        });
+      }
+      notes.getById(id).then((note) => {
+        res.status(200).json(note);
+      });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 module.exports = router;
