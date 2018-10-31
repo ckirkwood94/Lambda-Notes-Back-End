@@ -9,6 +9,7 @@ module.exports = {
   add,
   remove,
   update,
+  getTags,
 };
 
 function getAll() {
@@ -37,4 +38,12 @@ function update(id, newNote) {
   return db('notes')
     .where({ id })
     .update(newNote);
+}
+
+function getTags(noteId) {
+  console.log('getTags console.log', noteId);
+  return db('notes_tags')
+    .innerJoin('tags', 'notes_tags.tags_id', 'tags.id')
+    .where({ notes_id: noteId })
+    .select('tags.name');
 }

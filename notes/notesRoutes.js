@@ -1,22 +1,50 @@
 const express = require('express');
 
-const notes = require('./notesModel');
+const db = require('./notesModel');
 
 const router = express.Router();
 
 router.get('', (req, res) => {
-  notes
-    .getAll()
-    .then((notes) => {
-      res.status(200).json(notes);
+  db.getAll()
+    .then(async (returnedNotes) => {
+      const promises = returnedNotes.map(async (note) => {
+        await db.getTags(note.id).then((tags) => {
+          note.tags = tags;
+          console.log('inside map', note);
+          return note;
+        });
+      });
+      const results = Promise.all(promises);
+      results.then((result) => {
+        console.log('after map', result);
+        res.status(200).json(result);
+      });
+      // console.log(returnedNotes);
+      // newNotes = returnedNotes.map((note) => {
+      //   console.log(note, note.id);
+      //   notes.getTags(note.id).then((tags) => {
+      //     note.tags = tags;
+      //     console.log(note);
+      //   });
+      // });
+      // console.log(notes);
     })
     .catch((err) => res.status(500).json(err));
 });
 
+// router.get('/tags', (req, res) => {
+//   notes
+//     .getTags(1)
+//     .then((tags) => {
+//       console.log(tags);
+//       res.json(tags);
+//     })
+//     .catch((err) => res.status(500).json(err));
+// });
+
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  notes
-    .getById(id)
+  db.getById(id)
     .then((note) => {
       if (!note) {
         return res
@@ -38,8 +66,7 @@ router.post('', (req, res) => {
     });
   }
   const newNote = { title, textBody };
-  notes
-    .add(newNote)
+  db.add(newNote)
     .then((id) => {
       res.status(201).json(id);
     })
@@ -50,8 +77,7 @@ router.post('', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  notes
-    .remove(id)
+  db.remove(id)
     .then((count) => {
       if (count === 0) {
         return res.status(404).send({
@@ -74,8 +100,7 @@ router.put('/:id', (req, res) => {
   }
   const { id } = req.params;
   const newNote = { title, textBody };
-  notes
-    .update(id, newNote)
+  db.update(id, newNote)
     .then((note) => {
       if (!note) {
         return res.status(404).json({
