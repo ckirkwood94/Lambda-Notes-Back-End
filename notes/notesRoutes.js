@@ -12,6 +12,7 @@ const router = express.Router();
 //     .catch((err) => res.status(500).json(err));
 // });
 
+// GET all notes with tags
 router.get('', (req, res) => {
   db.getAll()
     .then((returnedNotes) => {
@@ -30,6 +31,7 @@ router.get('', (req, res) => {
     .catch((err) => res.status(500).json(err));
 });
 
+// GET Note by id with tags
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   db.getById(id)
@@ -49,6 +51,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// POST New note
 router.post('', (req, res) => {
   const { title, textBody } = req.body;
   if (!title || !textBody) {
@@ -66,6 +69,7 @@ router.post('', (req, res) => {
     });
 });
 
+// DELETE note by id
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   db.remove(id)
@@ -82,6 +86,7 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+// PUT edit note by id
 router.put('/:id', (req, res) => {
   const { title, textBody } = req.body;
   if (!title || !textBody) {
@@ -107,6 +112,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// POST Add tag to specific note
 router.post('/:notes_id', (req, res) => {
   const { notes_id } = req.params;
   const { tags_id } = req.body;
@@ -121,6 +127,24 @@ router.post('/:notes_id', (req, res) => {
     .catch((err) => {
       res.status(500).json(err);
     });
+});
+
+// DELETE Remove tag from specific note
+router.delete('/:notes_id/tag', (req, res) => {
+  const { notes_id } = req.params;
+  const { tags_id } = req.body;
+  if (!tags_id) {
+    return res.status(400).json({ message: 'Tag id required to remove tag' });
+  }
+  const tag = { notes_id, tags_id };
+  db.removeTagFromNote(tag)
+    .then((count) => {
+      if (!count) {
+        return res.status(404).json({ message: 'Could not remove tag' });
+      }
+      res.status(200).json({ message: 'Tag successfully removed' });
+    })
+    .catch((err) => res.status(500).json(err));
 });
 
 module.exports = router;

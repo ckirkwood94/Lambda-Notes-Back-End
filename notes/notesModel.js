@@ -12,6 +12,7 @@ module.exports = {
   getTags,
   getNotesAndTags,
   addTagToNote,
+  removeTagFromNote,
 };
 
 function getAll() {
@@ -60,4 +61,10 @@ function getNotesAndTags() {
 
 function addTagToNote(tag) {
   return db('notes_tags').insert(tag);
+}
+
+function removeTagFromNote(tag) {
+  return db('notes_tags')
+    .where(tag)
+    .del();
 }
