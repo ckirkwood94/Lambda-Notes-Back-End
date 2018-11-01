@@ -49,6 +49,11 @@ router.put('/:id', (req, res) => {
   const { id } = req.params;
   const tag = { name };
   tags.editTagName(id, tag).then((count) => {
+    if (!count) {
+      return res
+        .status(404)
+        .json({ message: 'Could not find record to update' });
+    }
     res.status(200).json({ message: `Successfully updated ${count} item` });
   });
 });
