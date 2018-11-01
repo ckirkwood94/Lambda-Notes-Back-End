@@ -16,14 +16,5 @@ server.use(cors());
 
 // ROUTES
 server.use('/api/notes', notesRoutes);
-server.get('/api/tags', (req, res) => {
-  notes
-    .getTags(2)
-    .then((tags) => {
-      console.log(tags);
-      res.json(tags);
-    })
-    .catch((err) => res.status(500).json(err));
-});
 
 server.listen(port, () => console.log(`\nAPI running on port ${port}\n`));

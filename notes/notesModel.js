@@ -10,6 +10,7 @@ module.exports = {
   remove,
   update,
   getTags,
+  getNotesAndTags,
 };
 
 function getAll() {
@@ -41,9 +42,17 @@ function update(id, newNote) {
 }
 
 function getTags(noteId) {
-  console.log('getTags console.log', noteId);
   return db('notes_tags')
     .innerJoin('tags', 'notes_tags.tags_id', 'tags.id')
     .where({ notes_id: noteId })
-    .select('tags.name');
+    .select('tags.name')
+    .map((row) => row.name);
+}
+
+function getNotesAndTags() {
+  return db
+    .select('notes.id', 'notes.title', 'notes.textBody', 'tags.name')
+    .from('notes')
+    .leftJoin('notes_tags', 'notes.id', 'notes_tags.notes_id')
+    .leftJoin('tags', 'notes_tags.tags_id', 'tags.id');
 }

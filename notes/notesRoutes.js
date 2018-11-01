@@ -4,43 +4,31 @@ const db = require('./notesModel');
 
 const router = express.Router();
 
-router.get('', (req, res) => {
-  db.getAll()
-    .then(async (returnedNotes) => {
-      const promises = returnedNotes.map(async (note) => {
-        await db.getTags(note.id).then((tags) => {
-          note.tags = tags;
-          console.log('inside map', note);
-          return note;
-        });
-      });
-      const results = Promise.all(promises);
-      results.then((result) => {
-        console.log('after map', result);
-        res.status(200).json(result);
-      });
-      // console.log(returnedNotes);
-      // newNotes = returnedNotes.map((note) => {
-      //   console.log(note, note.id);
-      //   notes.getTags(note.id).then((tags) => {
-      //     note.tags = tags;
-      //     console.log(note);
-      //   });
-      // });
-      // console.log(notes);
-    })
-    .catch((err) => res.status(500).json(err));
-});
-
-// router.get('/tags', (req, res) => {
-//   notes
-//     .getTags(1)
-//     .then((tags) => {
-//       console.log(tags);
-//       res.json(tags);
+// router.get('', (req, res) => {
+//   db.getNotesAndTags()
+//     .then((returnedNotes) => {
+//       res.status(200).json(returnedNotes);
 //     })
 //     .catch((err) => res.status(500).json(err));
 // });
+
+router.get('', (req, res) => {
+  db.getAll()
+    .then((returnedNotes) => {
+      // Create promises so all iterations of map run
+      const promises = returnedNotes.map(async (note) => {
+        await db.getTags(note.id).then((tags) => {
+          note.tags = tags;
+        });
+        return note;
+      });
+      // Call promises and return results of all mapped over notes
+      Promise.all(promises).then(function(result) {
+        res.status(200).json(result);
+      });
+    })
+    .catch((err) => res.status(500).json(err));
+});
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
@@ -51,7 +39,10 @@ router.get('/:id', (req, res) => {
           .status(404)
           .json({ message: `Note with id #${id} could not be found.` });
       }
-      res.status(200).json(note);
+      db.getTags(note.id).then((tags) => {
+        note.tags = tags;
+        res.status(200).json(note);
+      });
     })
     .catch((err) => {
       res.status(500).json(err);
