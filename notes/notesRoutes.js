@@ -107,4 +107,20 @@ router.put('/:id', (req, res) => {
     });
 });
 
+router.post('/:notes_id', (req, res) => {
+  const { notes_id } = req.params;
+  const { tags_id } = req.body;
+  if (!tags_id) {
+    return res.status(400).json({ message: 'Tag id required to add tag' });
+  }
+  const tag = { notes_id, tags_id };
+  db.addTagToNote(tag)
+    .then((id) => {
+      res.status(200).json(id);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 module.exports = router;

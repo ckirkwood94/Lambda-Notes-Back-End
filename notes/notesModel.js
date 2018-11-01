@@ -11,6 +11,7 @@ module.exports = {
   update,
   getTags,
   getNotesAndTags,
+  addTagToNote,
 };
 
 function getAll() {
@@ -55,4 +56,8 @@ function getNotesAndTags() {
     .from('notes')
     .leftJoin('notes_tags', 'notes.id', 'notes_tags.notes_id')
     .leftJoin('tags', 'notes_tags.tags_id', 'tags.id');
+}
+
+function addTagToNote(tag) {
+  return db('notes_tags').insert(tag);
 }
