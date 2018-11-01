@@ -7,6 +7,7 @@ module.exports = {
   addTagName,
   removeTagName,
   getTagNames,
+  editTagName,
 };
 
 function addTagName(tag) {
@@ -21,4 +22,10 @@ function removeTagName(id) {
 
 function getTagNames() {
   return db('tags');
+}
+
+function editTagName(id, tag) {
+  return db('tags')
+    .where({ id })
+    .update(tag);
 }

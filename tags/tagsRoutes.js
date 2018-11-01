@@ -39,4 +39,18 @@ router.delete('/:id', (req, res) => {
     .catch((err) => res.status(500).json(err));
 });
 
+router.put('/:id', (req, res) => {
+  const { name } = req.body;
+  if (!name) {
+    return res
+      .status(400)
+      .json({ message: 'Please provide a name for the tag.' });
+  }
+  const { id } = req.params;
+  const tag = { name };
+  tags.editTagName(id, tag).then((count) => {
+    res.status(200).json({ message: `Successfully updated ${count} item` });
+  });
+});
+
 module.exports = router;
