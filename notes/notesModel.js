@@ -9,6 +9,10 @@ module.exports = {
   add,
   remove,
   update,
+  getTags,
+  getNotesAndTags,
+  addTagToNote,
+  removeTagFromNote,
 };
 
 function getAll() {
@@ -37,4 +41,30 @@ function update(id, newNote) {
   return db('notes')
     .where({ id })
     .update(newNote);
+}
+
+function getTags(noteId) {
+  return db('notes_tags')
+    .innerJoin('tags', 'notes_tags.tags_id', 'tags.id')
+    .where({ notes_id: noteId })
+    .select('tags.name')
+    .map((row) => row.name);
+}
+
+function getNotesAndTags() {
+  return db
+    .select('notes.id', 'notes.title', 'notes.textBody', 'tags.name')
+    .from('notes')
+    .leftJoin('notes_tags', 'notes.id', 'notes_tags.notes_id')
+    .leftJoin('tags', 'notes_tags.tags_id', 'tags.id');
+}
+
+function addTagToNote(tag) {
+  return db('notes_tags').insert(tag);
+}
+
+function removeTagFromNote(tag) {
+  return db('notes_tags')
+    .where(tag)
+    .del();
 }
