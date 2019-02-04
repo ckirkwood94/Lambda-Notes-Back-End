@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -5,7 +6,7 @@ const cors = require('cors');
 const notesRoutes = require('./notes/notesRoutes');
 const tagsRoutes = require('./tags/tagsRoutes');
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 const server = express();
 
