@@ -16,6 +16,9 @@ server.use(express.json());
 server.use(cors());
 
 // ROUTES
+server.get('/', (req, res) => {
+  res.status(200).json({ api: 'running!' });
+});
 server.use('/api/notes', notesRoutes);
 server.use('/api/tags', tagsRoutes);
 
