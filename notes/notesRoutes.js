@@ -103,7 +103,7 @@ router.put('/:id', (req, res) => {
           message: 'No note found to update',
         });
       }
-      notes.getById(id).then((note) => {
+      db.getById(id).then((note) => {
         res.status(200).json(note);
       });
     })
