@@ -1,6 +1,11 @@
 {
   "name": "Lambda-Notes-Back-End",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.4.1",
+    "yarn": "1.16.0"
+  },
   "main": "index.js",
   "repository": "https://github.com/ckirkwood94/Lambda-Notes-Back-End.git",
   "author": "ckirkwood94 <ckirkwood94@gmail.com>",
@@ -19,7 +24,6 @@
     "express": "^4.16.4",
     "helmet": "^3.14.0",
     "knex": "^0.16.5",
-    "node": "^12.2.0",
     "pg": "^7.6.0",
     "sqlite3": "^4.0.6"
   }
